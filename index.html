@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>line.io</title>
+   
+    <script type="text/javascript" src="dist/paper-full.js"></script>
+    <script type="text/paperscript" canvas="canvas">
+    
+    var circles = [];
+    var numCircles = 0;
+    
+    var circlesDestination = [];
+
+    tool.minDistance = 10;
+		
+		//the maximum radius for a circle. 
+		tool.maxDistance = 500;
+
+		//when the user drags the mouse, draw circles
+		function onMouseDrag(event) {
+			var circle = new Path.Circle({
+				center: event.middlePoint,
+				//the difference in speed (time & distance) when mouse is dragged. 
+				//try different numbers to divide
+				radius: event.delta.length / 1.25,
+				fillColor: '#F35454'
+			});
+			circles.push(circle);
+			var circleDestination = Point.random()*view.size;
+			circlesDestination.push(circleDestination);
+			numCircles += 1;
+		}
+		
+		// make the circle x
+		// add to array of circles x
+
+		// create destinations for all circles
+		// move all circles
+
+    function onFrame(event){
+    	
+    	// Changes the colours of the circles
+    	for (var i=0; i < numCircles; i++){
+    		circles[i].fillColor.hue += 1;
+			circles[i].fillColor.alpha -= 0.002;
+			if (circles[i].fillColor.alpha == 0.5){
+				circles[i].remove();
+			}
+    	}
+    	
+    	for (var k=0; k < numCircles; k++){
+    		var vectorCircle = circlesDestination[k] - circles[k].position;
+    		circles[k].position += vectorCircle / 1000;
+    		
+    		if (vectorCircle.length < 100){
+    			circlesDestination[k] = Point.random() * view.size;
+    		}
+    	}
+    
+    	// To move a shape, you need:
+    	// Destination
+    	// Vector ( destination - shape.position)
+    	// if statement (vector.length < 100) 
+
+    }
+    </script>
+	<style>
+	body{
+		background-color:white;
+		margin:0;
+	}
+	#description{
+		position: absolute;
+  		left: 50%;
+  		top: 50%;
+  		transform: translate(-50%,-50%);
+		z-index:-1;
+		text-align:center;
+		font-family:Arial;
+		background-color:white;
+		border-radius:1em;
+		border-style: solid;
+		border-color:darkgray;
+		color:darkgray;
+	}
+	canvas{
+		z-index:1;
+		float:left;
+	}
+	#background{
+		position:absolute;
+		background-image: url("BackGrid2.jpg");
+		background-size:cover;
+		width:100%;
+		height: 100%;
+		z-index:-2;
+	}
+	h2{
+		font-style:italic;
+	}
+	</style>
+</head>
+<body>
+	<div id="background"></div>
+	<div id="description">
+	<h2>"A line can be thought of as points so close together they loose their individual identity and form a new entity."</h2>
+	<h1>Click and drag your mouse to draw a line.</h1>
+	</div>
+   	<canvas id="canvas" resize="true">
+	
+	
+	</canvas>
+</body>
+</html>
