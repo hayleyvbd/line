@@ -2,10 +2,10 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>line.io</title>
+    <title>line v0.1.1</title>
    
     <script type="text/javascript" src="dist/paper-full.js"></script>
-    <script type="text/paperscript" canvas="canvas">
+	<script type="text/paperscript" canvas="canvas">
     
     var circles = [];
     var numCircles = 0;
@@ -30,6 +30,7 @@
 			var circleDestination = Point.random()*view.size;
 			circlesDestination.push(circleDestination);
 			numCircles += 1;
+			console.log(numCircles);
 		}
 		
 		// make the circle x
@@ -44,8 +45,13 @@
     	for (var i=0; i < numCircles; i++){
     		circles[i].fillColor.hue += 1;
 			circles[i].fillColor.alpha -= 0.002;
-			if (circles[i].fillColor.alpha == 0.5){
+			if (circles[i].fillColor.alpha <= 0.1){
 				circles[i].remove();
+				circles.splice(i, 1);
+				circlesDestination.splice(i, 1);
+				numCircles -=1;
+				i -= 1;
+				
 			}
     	}
     	
@@ -67,7 +73,6 @@
     </script>
 	<style>
 	body{
-		background-color:white;
 		margin:0;
 	}
 	#description{
@@ -91,6 +96,7 @@
 	#background{
 		position:absolute;
 		background-image: url("BackGrid2.jpg");
+		background-size:cover;
 		z-index:-2;
 	}
 	h2{
@@ -99,13 +105,13 @@
 	</style>
 </head>
 <body>
-	<div id="background"></div>
+	<div id="background">
 	<div id="description">
 	<h2>"A line can be thought of as points so close together they loose their individual identity and form a new entity."</h2>
 	<h1>Click and drag your mouse to draw a line.</h1>
 	</div>
    	<canvas id="canvas" resize="true" hidpi="off">
-	
+	</div>
 	
 	</canvas>
 </body>
